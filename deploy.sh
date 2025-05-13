@@ -35,15 +35,19 @@ find ./ -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname
   cp "$file" "$out"
 done
 
-echo "=== Optimasi Gambar ==="
-find ./dist -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -exec jpegoptim --max=80 {} \;
-find ./dist -type f -iname "*.png" -exec pngcrush -brute -reduce {} {} \;
+echo "=== Optimasi Gambar PNG ==="
+find ./dist -type f -iname "*.png" | while read -r file; do
+  echo "Optimasi PNG: $file"
+  pngcrush -brute -reduce "$file" "${file}.tmp" && mv "${file}.tmp" "$file"
+done
 
 echo "=== Validasi HTML ==="
-for file in ./dist/*.html; do
-  if [ -f "$file" ]; then
-    html-validator --file "$file" --verbose || exit 1
-  fi
+find ./dist -type f -name "*.html" | while read -r file; do
+  echo "Memvalidasi: $file"
+  html-validator --file "$file" --verbose || {
+    echo "Validasi gagal pada: $file"
+    exit 1
+  }
 done
 
 echo "=== Linting JS ==="
