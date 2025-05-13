@@ -3,6 +3,9 @@
 # Pindah ke direktori kerja Jenkins
 cd /var/lib/jenkins/workspace/jenkins_testing/
 
+#buat direktori
+mkdir -p dist
+
 # Minify semua file HTML di dalam folder (termasuk subfolder)
 find ./ -type f -name "*.html" -exec html-minifier --collapse-whitespace --remove-comments --output ./dist/{} {} \;
 
