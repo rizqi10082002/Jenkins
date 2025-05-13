@@ -31,8 +31,8 @@ done
 echo "=== Optimasi Gambar ==="
 find ./dist -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -exec jpegoptim --max=80 {} \;
 
-# Testing File Index.html
-html-validator --file index.html --verbose || exit 1
+echo "=== html validator ==="
+html-validator "./dist/**/*.html" --verbose || exit 1
 
 echo "=== Linting JS ==="
 eslint "./dist/**/*.js" || exit 1
