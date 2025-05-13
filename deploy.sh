@@ -1,45 +1,66 @@
 #!/bin/bash
 
 # Pindah ke direktori kerja Jenkins
-cd /var/lib/jenkins/workspace/jenkins_testing/
+cd /var/lib/jenkins/workspace/jenkins_testing/ || exit 1
 
-#buat direktori
+# Hapus dan buat ulang direktori dist
+rm -rf dist
 mkdir -p dist
 
-# Minify semua file HTML di dalam folder (termasuk subfolder)
-find ./ -type f -name "*.html" -exec html-minifier --collapse-whitespace --remove-comments --output ./dist/{} {} \;
+echo "=== Minify HTML ==="
+find ./ -type f -name "*.html" | while read -r file; do
+  out=./dist/"$file"
+  mkdir -p "$(dirname "$out")"
+  html-minifier --collapse-whitespace --remove-comments --output "$out" "$file"
+done
 
-# Minify semua file CSS di dalam folder (termasuk subfolder)
-find ./ -type f -name "*.css" -exec clean-css -o ./dist/{} {} \;
+echo "=== Minify CSS ==="
+find ./ -type f -name "*.css" | while read -r file; do
+  out=./dist/"$file"
+  mkdir -p "$(dirname "$out")"
+  clean-css -o "$out" "$file"
+done
 
-# Minify semua file JS di dalam folder (termasuk subfolder)
-find ./ -type f -name "*.js" -exec terser {} --output ./dist/{} \;
+echo "=== Minify JS ==="
+find ./ -type f -name "*.js" | while read -r file; do
+  out=./dist/"$file"
+  mkdir -p "$(dirname "$out")"
+  terser "$file" --output "$out"
+done
 
-# Salin asset (gambar, font, dll) ke folder dist tanpa diubah
-find ./ -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.gif" -o -iname "*.svg" -o -iname "*.ttf" -o -iname "*.woff" -o -iname "*.woff2" \) -exec cp {} ./dist/{} \;
+echo "=== Copy Assets (Gambar, Font, dll) ==="
+find ./ -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.gif" -o -iname "*.svg" -o -iname "*.ttf" -o -iname "*.woff" -o -iname "*.woff2" \) | while read -r file; do
+  out=./dist/"$file"
+  mkdir -p "$(dirname "$out")"
+  cp "$file" "$out"
+done
 
-# Optimasi gambar (contoh pakai imagemagick atau jpegoptim untuk mengurangi ukuran file gambar)
+echo "=== Optimasi Gambar ==="
 find ./dist -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -exec jpegoptim --max=80 {} \;
-find ./dist -type f \( -iname "*.png" \) -exec pngcrush -brute -reduce {} {} \;
+find ./dist -type f -iname "*.png" -exec pngcrush -brute -reduce {} {} \;
 
-# Validasi file HTML setelah minify
-html-validator --file ./dist/index.html --verbose || exit 1
+echo "=== Validasi HTML ==="
+if [ -f "./dist/index.html" ]; then
+  html-validator --file ./dist/index.html --verbose || exit 1
+fi
 
-# Linting CSS untuk pengecekan kesalahan atau peringatan
-stylelint ./dist/**/*.css || exit 1
+echo "=== Linting CSS ==="
+stylelint "./dist/**/*.css" || exit 1
 
-# Linting JS untuk pengecekan kesalahan atau peringatan
-eslint ./dist/**/*.js || exit 1
+echo "=== Linting JS ==="
+eslint "./dist/**/*.js" || exit 1
 
-# Hentikan dan hapus container lama (jika ada)
-docker stop jenkinsapss || true
-docker rm jenkinsapss || true
+echo "=== Stop & Remove Container Lama ==="
+docker stop jenkinsapss 2>/dev/null || true
+docker rm jenkinsapss 2>/dev/null || true
 
-# Build ulang Docker image dengan folder dist yang sudah diminyakan dan asset
+echo "=== Build Docker Image ==="
 docker build -t jenkins-apps .
 
-# Jalankan container baru di port 3002
+echo "=== Jalankan Container di Port 3002 ==="
 docker run -d -p 3002:80 --name jenkinsapss jenkins-apps
 
-# Bersihkan image lama yang tidak digunakan
+echo "=== Bersihkan Docker Image Lama ==="
 docker image prune -f
+
+echo "✅ DEPLOYMENT SELESAI"
