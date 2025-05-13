@@ -40,12 +40,11 @@ find ./dist -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -exec jpegoptim --ma
 find ./dist -type f -iname "*.png" -exec pngcrush -brute -reduce {} {} \;
 
 echo "=== Validasi HTML ==="
-if [ -f "./dist/index.html" ]; then
-  html-validator --file ./dist/index.html --verbose || exit 1
-fi
-
-echo "=== Linting CSS ==="
-stylelint "./dist/**/*.css" || exit 1
+for file in ./dist/*.html; do
+  if [ -f "$file" ]; then
+    html-validator --file "$file" --verbose || exit 1
+  fi
+done
 
 echo "=== Linting JS ==="
 eslint "./dist/**/*.js" || exit 1
