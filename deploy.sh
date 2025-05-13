@@ -28,18 +28,8 @@ find ./ -type f -name "*.js" | while read -r file; do
   terser "$file" --output "$out"
 done
 
-echo "=== Copy Assets (Gambar, Font, dll) ==="
-find ./ -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.gif" -o -iname "*.svg" -o -iname "*.ttf" -o -iname "*.woff" -o -iname "*.woff2" \) | while read -r file; do
-  out=./dist/"$file"
-  mkdir -p "$(dirname "$out")"
-  cp "$file" "$out"
-done
-
-echo "=== Optimasi Gambar PNG ==="
-find ./dist -type f -iname "*.png" | while read -r file; do
-  echo "Optimasi PNG: $file"
-  pngcrush -brute -reduce "$file" "${file}.tmp" && mv "${file}.tmp" "$file"
-done
+echo "=== Optimasi Gambar ==="
+find ./dist -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -exec jpegoptim --max=80 {} \;
 
 echo "=== Validasi HTML ==="
 find ./dist -type f -name "*.html" | while read -r file; do
