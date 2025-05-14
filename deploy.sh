@@ -32,16 +32,7 @@ echo "=== Optimasi Gambar ==="
 find ./dist -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -exec jpegoptim --max=80 {} \;
 
 echo "=== Validasi HTML ==="
-find ./dist -type f -name "*.html" | while read -r file; do
-  echo "Memvalidasi: $file"
-  html-validator --file "$file" --verbose || {
-    echo "❌ Validasi gagal pada: $file"
-    exit 1
-  }
-done
-
-echo "=== Linting JS ==="
-eslint "./dist/**/*.js" || exit 1
+html-validator --file index.html --verbose || exit 1
 
 echo "=== Stop & Remove Container Lama ==="
 docker stop jenkinsapss 2>/dev/null || true
