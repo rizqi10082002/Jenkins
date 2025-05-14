@@ -32,11 +32,15 @@ find ./dist -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -exec jpegoptim --ma
 
 echo "=== Validasi HTML ==="
 find dist -type f -name "*.html" | while read -r file; do
-  echo "🔍 Memvalidasi $file ..."
-  if ! html-validator --file "$file" --validator http://localhost:8888 --verbose; then
-    echo "❌ Validasi gagal untuk $file"
-  fi
-  echo ""
+    echo "🔍 Memvalidasi: $file"
+    
+    if ! html-validator --file "$file" --validator http://localhost:8888 --verbose; then
+        echo "❌ Validasi gagal untuk $file"
+    else
+        echo "✅ Validasi sukses untuk $file"
+    fi
+
+    echo ""
 done
 
 echo "=== Stop & Remove Container Lama ==="
