@@ -48,12 +48,25 @@ OUTPUT=$(html-validator --file dist/about.html --validator http://localhost:8888
 echo "$OUTPUT"
 
 if echo "$OUTPUT" | grep -q "Error:"; then
-  echo "❌ STATUS: index.html masih ada ERROR. Deployment dibatalkan."
+  echo "❌ STATUS: about.html masih ada ERROR. Deployment dibatalkan."
   exit 1
 elif echo "$OUTPUT" | grep -q "Warning:"; then
-  echo "⚠️  STATUS: index.html ada WARNING. Perlu dicek lebih lanjut."
+  echo "⚠️  STATUS: about.html ada WARNING. Perlu dicek lebih lanjut."
 else
-  echo "✅ STATUS: index.html valid. Tidak ada error atau warning."
+  echo "✅ STATUS: about.html valid. Tidak ada error atau warning."
+fi
+
+echo "=== Validasi blog.html ==="
+OUTPUT=$(html-validator --file dist/blog.html --validator http://localhost:8888 --verbose 2>&1)
+echo "$OUTPUT"
+
+if echo "$OUTPUT" | grep -q "Error:"; then
+  echo "❌ STATUS: blog.html masih ada ERROR. Deployment dibatalkan."
+  exit 1
+elif echo "$OUTPUT" | grep -q "Warning:"; then
+  echo "⚠️  STATUS: blog.html ada WARNING. Perlu dicek lebih lanjut."
+else
+  echo "✅ STATUS: blog.html valid. Tidak ada error atau warning."
 fi
 
 echo "=== Stop & Remove Container Lama ==="
