@@ -18,7 +18,6 @@ echo "=== Minify CSS ==="
 find ./ -type f -name "*.css" | while read -r file; do
   out=./dist/"$file"
   mkdir -p "$(dirname "$out")"
-  clean-css -o "$out" "$file"
 done
 
 echo "=== Minify JS ==="
@@ -32,7 +31,11 @@ echo "=== Optimasi Gambar ==="
 find ./dist -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -exec jpegoptim --max=80 {} \;
 
 echo "=== Validasi HTML ==="
-html-validator --file index.html --validator http://localhost:8888 --verbose
+find dist -name "*.html" | while read file; do
+    echo "Memvalidasi $file..."
+    html-validator --file "$file" --validator http://localhost:8888 --verbose
+    echo ""
+done
 
 echo "=== Stop & Remove Container Lama ==="
 docker stop jenkinsapss 2>/dev/null || true
