@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Bookly - Bookstore eCommerce Website Template</title>
     <meta charset="utf-8">
@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="author" content="">
     <meta name="keywords" content="">
     <meta name="description" content="">
@@ -219,7 +220,7 @@
               <use xlink:href="#navbar-icon"></use>
             </svg>
           </button>
-          <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel">
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar" aria-labelledby="bdNavbarLabel">
             <div class="offcanvas-header px-4 pb-0">
               <a class="navbar-brand" href="index.html">
                 <img src="images/main-logo.png" class="logo" alt="Deskripsi gambar">
@@ -303,13 +304,13 @@
                                 <div class="tab-pane fade active show" id="nav-sign-in" role="tabpanel"
                                   aria-labelledby="nav-sign-in-tab">
                                   <div class="form-group py-3">
-                                    <label class="mb-2" for="sign-in">Username or email address *</label>
+                                    <label class="mb-2" for="username">Username or email address *</label>
                                     <input type="text" id="username" minlength="2" name="username" placeholder="Your Username"
                                       class="form-control w-100 rounded-3 p-3" required>
                                   </div>
                                   <div class="form-group pb-3">
-                                    <label class="mb-2" for="sign-in">Password *</label>
-                                    <input type="password" id="password" minlength="2" name="password" placeholder="Your Password"
+                                    <label class="mb-2" for="password-signin">Password *</label>
+                                    <input type="password" id="password-signin" minlength="2" name="password" placeholder="Your Password"
                                       class="form-control w-100 rounded-3 p-3" required>
                                   </div>
                                   <label class="py-3">
@@ -322,13 +323,13 @@
                                 <div class="tab-pane fade" id="nav-register" role="tabpanel"
                                   aria-labelledby="nav-register-tab">
                                   <div class="form-group py-3">
-                                    <label class="mb-2" for="register">Your email address *</label>
-                                    <input type="text" minlength="2" name="username" placeholder="Your Email Address"
+                                    <label class="mb-2" for="email">Your email address *</label>
+                                    <input type="text" minlength="2" id="email" name="username" placeholder="Your Email Address"
                                       class="form-control w-100 rounded-3 p-3" required>
                                   </div>
                                   <div class="form-group pb-3">
-                                    <label class="mb-2" for="sign-in">Password *</label>
-                                    <input type="password" minlength="2" name="password" placeholder="Your Password"
+                                    <label class="mb-2" for="password-register">Password *</label>
+                                    <input type="password" minlength="2" id="password-register"  name="password" placeholder="Your Password"
                                       class="form-control w-100 rounded-3 p-3" required>
                                   </div>
                                   <label class="py-3">
@@ -1499,7 +1500,7 @@
       </div>
     </section>
 
-    <section id="instagram">
+    <section id="instagram-footer">
       <div class="container">
         <div class="text-center mb-4">
           <h3>Instagram</h3>
@@ -1725,9 +1726,9 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
-    <script type="text/javascript" src="js/script.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript" src="js/slide.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/slide.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
   </body>
