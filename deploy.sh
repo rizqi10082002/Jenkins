@@ -31,22 +31,17 @@ echo "=== Optimasi Gambar ==="
 find ./dist -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -exec jpegoptim --max=80 {} \;
 
 echo "=== Validasi HTML ==="
-status_valid=true
+OUTPUT=$(html-validator --file index.html --validator http://localhost:8888 --verbose 2>&1)
+echo "$OUTPUT"
 
-find dist -name "*.html" | while read -r file; do
-  echo "Memvalidasi $file..."
-  OUTPUT=$(html-validator --file "$file" --validator http://localhost:8888 --verbose 2>&1)
-  echo "$OUTPUT"
-
-  if echo "$OUTPUT" | grep -q "Error:"; then
-    echo "❌ STATUS: Masih ada ERROR di $file"
-    status_valid=false
-  elif echo "$OUTPUT" | grep -q "Warning:"; then
-    echo "⚠️  STATUS: Ada WARNING di $file. Perlu dicek lagi."
-  else
-    echo "✅ $file valid."
-  fi
-done
+if echo "$OUTPUT" | grep -q "Error:"; then
+  echo "❌ STATUS: index.html masih ada ERROR. Deployment dibatalkan."
+  exit 1
+elif echo "$OUTPUT" | grep -q "Warning:"; then
+  echo "⚠️  STATUS: index.html ada WARNING. Perlu dicek lebih lanjut."
+else
+  echo "✅ STATUS: index.html valid. Tidak ada error atau warning."
+fi
 
 echo "=== Stop & Remove Container Lama ==="
 docker stop jenkinsapss 2>/dev/null || true
