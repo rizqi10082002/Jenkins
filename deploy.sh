@@ -31,7 +31,7 @@ echo "=== Optimasi Gambar ==="
 find ./dist -type f \( -iname "*.jpg" -o -iname "*.jpeg" \) -exec jpegoptim --max=80 {} \;
 
 echo "=== Validasi HTML ==="
-OUTPUT=$(html-validator --file index.html --validator http://localhost:8888 --verbose 2>&1)
+OUTPUT=$(html-validator --file dist/index.html --validator http://localhost:8888 --verbose 2>&1)
 echo "$OUTPUT"
 
 if echo "$OUTPUT" | grep -q "Error:"; then
