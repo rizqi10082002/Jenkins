@@ -69,6 +69,32 @@ else
   echo "✅ STATUS: blog.html valid. Tidak ada error atau warning."
 fi
 
+echo "=== Validasi contact.html ==="
+OUTPUT=$(html-validator --file dist/contact.html --validator http://localhost:8888 --verbose 2>&1)
+echo "$OUTPUT"
+
+if echo "$OUTPUT" | grep -q "Error:"; then
+  echo "❌ STATUS: contact.html masih ada ERROR. Deployment dibatalkan."
+  exit 1
+elif echo "$OUTPUT" | grep -q "Warning:"; then
+  echo "⚠️  STATUS: contact.html ada WARNING. Perlu dicek lebih lanjut."
+else
+  echo "✅ STATUS: contact.html valid. Tidak ada error atau warning."
+fi
+
+echo "=== Validasi shop.html ==="
+OUTPUT=$(html-validator --file dist/shop.html --validator http://localhost:8888 --verbose 2>&1)
+echo "$OUTPUT"
+
+if echo "$OUTPUT" | grep -q "Error:"; then
+  echo "❌ STATUS: shop.html masih ada ERROR. Deployment dibatalkan."
+  exit 1
+elif echo "$OUTPUT" | grep -q "Warning:"; then
+  echo "⚠️  STATUS: shop.html ada WARNING. Perlu dicek lebih lanjut."
+else
+  echo "✅ STATUS: shop.html valid. Tidak ada error atau warning."
+fi
+
 echo "=== Stop & Remove Container Lama ==="
 docker stop jenkinsapss 2>/dev/null || true
 docker rm jenkinsapss 2>/dev/null || true
